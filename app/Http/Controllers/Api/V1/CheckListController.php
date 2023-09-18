@@ -11,7 +11,7 @@ class CheckListController extends Controller
 {
     public function index()
     {
-        return ChecklistResource::collection(Checklist::all());
+        return ChecklistResource::collection(Checklist::with('checklistItems')->get());
     }
 
     public function store(Request $request)

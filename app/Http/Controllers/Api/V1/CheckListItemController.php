@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Api\V1;
 
+use App\Enums\ChecklistItemStatus;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\ChecklistItemResource;
 use App\Models\Checklist;
@@ -12,17 +13,16 @@ class CheckListItemController extends Controller
 {
     public function index(Checklist $checklist)
     {
-        $data = ChecklistItem::where('checklist_id', $checklist->id)->get();
+        $checklistItem = $checklist->checklistItems;
 
-        return ChecklistItemResource::collection($data);
+        return ChecklistItemResource::collection($checklistItem);
     }
 
     public function store(Checklist $checklist, Request $request)
     {
-        $data = CheckListItem::create([
-            'checklist_id' => $checklist->id,
+        $data = $checklist->checklistItems()->create([
             'content' => $request->itemName,
-            'status' => 0,
+            'status' => ChecklistItemStatus::NotCompleted->value,
         ]);
 
         return ChecklistItemResource::make($data);
@@ -36,7 +36,7 @@ class CheckListItemController extends Controller
     public function update(ChecklistItem $checklistItem)
     {
         $checklistItem->update([
-            'status' => 1,
+            'status' => ChecklistItemStatus::Completed->value,
         ]);
 
         return ChecklistItemResource::make($checklistItem);
