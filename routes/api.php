@@ -24,10 +24,11 @@ Route::middleware('auth:api')->group(function () {
     Route::controller(CheckListItemController::class)->group(function () {
         Route::get('checklist/{checklist}/item', 'index');
         Route::post('checklist/{checklist}/item', 'store');
-        Route::get('checklist/{checklist}/item/{checklistItem}', 'show');
-        Route::put('checklist/{checklist}/item/{checklistItem}', 'update');
-        Route::put('checklist/{checklist}/item/rename/{checklistItem}', 'rename');
-        Route::delete('checklist/{checklist}/item/{checklistItem}', 'destroy');
+        Route::scopeBindings()->group(function () {
+            Route::get('checklist/{checklist}/item/{checklistItem}', 'show');
+            Route::put('checklist/{checklist}/item/{checklistItem}', 'update');
+            Route::put('checklist/{checklist}/item/rename/{checklistItem}', 'rename');
+            Route::delete('checklist/{checklist}/item/{checklistItem}', 'destroy');
+        });
     });
-
 });
