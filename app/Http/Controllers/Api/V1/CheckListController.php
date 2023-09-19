@@ -3,9 +3,9 @@
 namespace App\Http\Controllers\Api\V1;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\ChecklistRequest;
 use App\Http\Resources\ChecklistResource;
 use App\Models\Checklist;
-use Illuminate\Http\Request;
 
 class CheckListController extends Controller
 {
@@ -14,9 +14,9 @@ class CheckListController extends Controller
         return ChecklistResource::collection(Checklist::with('checklistItems')->get());
     }
 
-    public function store(Request $request)
+    public function store(ChecklistRequest $request)
     {
-        return ChecklistResource::make(Checklist::create(['title' => $request->title]));
+        return ChecklistResource::make(Checklist::create($request->validated()));
     }
 
     public function destroy(Checklist $checklist)

@@ -4,10 +4,10 @@ namespace App\Http\Controllers\Api\V1;
 
 use App\Enums\ChecklistItemStatus;
 use App\Http\Controllers\Controller;
+use App\Http\Requests\ChecklistItemRequest;
 use App\Http\Resources\ChecklistItemResource;
 use App\Models\Checklist;
 use App\Models\ChecklistItem;
-use Illuminate\Http\Request;
 
 class CheckListItemController extends Controller
 {
@@ -18,7 +18,7 @@ class CheckListItemController extends Controller
         return ChecklistItemResource::collection($checklistItem);
     }
 
-    public function store(Checklist $checklist, Request $request)
+    public function store(Checklist $checklist, ChecklistItemRequest $request)
     {
         $data = $checklist->checklistItems()->create([
             'content' => $request->itemName,
@@ -49,7 +49,7 @@ class CheckListItemController extends Controller
         return response()->noContent();
     }
 
-    public function rename(ChecklistItem $checklistItem, Request $request)
+    public function rename(ChecklistItem $checklistItem, ChecklistItemRequest $request)
     {
         $checklistItem->update([
             'content' => $request->itemName,
