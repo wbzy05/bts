@@ -8,6 +8,7 @@ use App\Http\Requests\ChecklistItemRequest;
 use App\Http\Resources\ChecklistItemResource;
 use App\Models\Checklist;
 use App\Models\ChecklistItem;
+use Symfony\Component\HttpFoundation\Response;
 
 class CheckListItemController extends Controller
 {
@@ -15,7 +16,10 @@ class CheckListItemController extends Controller
     {
         $checklistItem = $checklist->checklistItems;
 
-        return ChecklistItemResource::collection($checklistItem);
+        return ChecklistItemResource::collection($checklistItem)->additional(['meta' => [
+            'status' => Response::HTTP_OK,
+            'message' => 'Getting checklist items successfully',
+        ]]);
     }
 
     public function store(Checklist $checklist, ChecklistItemRequest $request)
@@ -25,12 +29,18 @@ class CheckListItemController extends Controller
             'status' => ChecklistItemStatus::NotCompleted->value,
         ]);
 
-        return ChecklistItemResource::make($data);
+        return ChecklistItemResource::make($data)->additional(['meta' => [
+            'status' => Response::HTTP_CREATED,
+            'message' => 'Checklist item created successfully',
+        ]]);
     }
 
     public function show(ChecklistItem $checklistItem)
     {
-        return ChecklistItemResource::make($checklistItem);
+        return ChecklistItemResource::make($checklistItem)->additional(['meta' => [
+            'status' => Response::HTTP_OK,
+            'message' => 'Getting checklist item successfully',
+        ]]);
     }
 
     public function update(ChecklistItem $checklistItem)
@@ -39,7 +49,10 @@ class CheckListItemController extends Controller
             'status' => ChecklistItemStatus::Completed->value,
         ]);
 
-        return ChecklistItemResource::make($checklistItem);
+        return ChecklistItemResource::make($checklistItem)->additional(['meta' => [
+            'status' => Response::HTTP_OK,
+            'message' => 'Update checklist item successfully',
+        ]]);
     }
 
     public function destroy(ChecklistItem $checklistItem)
@@ -55,6 +68,9 @@ class CheckListItemController extends Controller
             'content' => $request->itemName,
         ]);
 
-        return ChecklistItemResource::make($checklistItem);
+        return ChecklistItemResource::make($checklistItem)->additional(['meta' => [
+            'status' => Response::HTTP_OK,
+            'message' => 'Rename checklist item successfully',
+        ]]);
     }
 }
